@@ -1,14 +1,20 @@
-const express = require('express')
-const path = require('path')
-const uuid = require('uuid')
-const puppeteer = require('puppeteer')
-const fs = require('fs')
-
+import express from 'express'
+import path  from 'path'
+import { v4 as uuidv4 } from 'uuid'
+import puppeteer from 'puppeteer'
+import fs from 'fs'
+const __dirname = path.resolve()
 
 
 const app = express()
 app.use(express.json())
 app.use('/static', express.static(path.join(__dirname, 'public')))
+let browser = await puppeteer.launch({
+    args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+      ],
+})
 
 app.get("/ping", async (req, res, next) => {
     return res.send({
@@ -17,7 +23,7 @@ app.get("/ping", async (req, res, next) => {
 })
 
 app.post("/convert", async (req, res, next) => {
-    let pageId = uuid.v4()
+    let pageId = uuidv4()
     try {
         let url = req.body.url
         if (!url) {
@@ -26,15 +32,6 @@ app.post("/convert", async (req, res, next) => {
             })
         }
 
-        let browser = await puppeteer.launch(
-            {
-                args: [
-                  '--no-sandbox',
-                  '--disable-setuid-sandbox',
-                ],
-            }
-        )
-        
         let page = await browser.newPage()
         await page.goto(url, {
             waitUntil: 'networkidle2'
@@ -72,4 +69,6 @@ app.use(function(error, req, res, next) {
 
 
 let PORT = process.env.PORT || 5001
-app.listen(PORT, () => console.log("server started at PORT " + PORT))
+app.listen(PORT, () => {
+    console.log("server started at PORT " + PORT)
+})
