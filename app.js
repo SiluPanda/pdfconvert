@@ -42,6 +42,7 @@ app.post("/convert", async (req, res, next) => {
             path: `public/${pageId}.pdf`, 
             format: 'a4'
         })
+        await page.close()
 
         res.download(`public/${pageId}.pdf`, req.body.fileName || `${pageId}.pdf`)
 
@@ -51,6 +52,7 @@ app.post("/convert", async (req, res, next) => {
                     console.log(`pdf with id ${pageId} is deleted successfully`)
                 }
             })
+            
         })
 
 
