@@ -3,6 +3,7 @@ import path  from 'path'
 import puppeteer from 'puppeteer'
 import pdfRouter from './routes/pdfRouter.js'
 import screenshotRouter from './routes/screenshotRouter.js'
+import scrapeRouter from './routes/scrapeRouter.js'
 const __dirname = path.resolve()
 
 
@@ -27,6 +28,7 @@ app.get("/ping", async (req, res, next) => {
 
 app.use('/pdf', pdfRouter)
 app.use('/screenshot', screenshotRouter)
+app.use('/scrape', scrapeRouter)
 
 app.use(function(error, req, res, next) {
     console.log(error)

@@ -77,7 +77,14 @@ router.post('/url', async (req, res, next) => {
 
 
     } catch (err) {
-        next(err)
+        let placeholder = req.body.placeholder || false;
+
+        if (placeholder) {
+            return res.download('public/defaults/default.jpeg')
+        }
+        else {
+            next(err)
+        }
     }
 })
 
